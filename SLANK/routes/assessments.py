@@ -30,7 +30,6 @@ def create_assessment():
         "id": assessment.id,
         "type": assessment.type
     }), 201
-# POST is done
 
 
 @assessments_bp.route("/assessments", methods=["GET"])
@@ -59,7 +58,6 @@ def get_assessment(assessment_id):
         "score": assessment.score,
         "raw_data": assessment.raw_data
     }), 200
-# GET_ID is done
 
 
 @assessments_bp.route("/assessments/<int:assessment_id>", methods=["PATCH"])
@@ -85,7 +83,6 @@ def update_assessment(assessment_id):
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
     return jsonify({"updated_id": assessment_id}), 200
-# UPDATER is done
 
 
 @assessments_bp.route("/assessments/<int:assessment_id>", methods=["DELETE"])
@@ -101,4 +98,3 @@ def delete_assessment(assessment_id):
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
     return jsonify({"deleted_id": assessment.id}), 204
-# DELETE is done
