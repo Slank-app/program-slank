@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Slank Demo</title>
+    <link rel="stylesheet" href="./styl.css">
+</head>
+
+<body>
+
+    <h2>Slank Adaptive Learning Demo</h2>
+
+    <form id="sessionForm">
+        Items seen: <input type="number" id="items_seen" required><br>
+        Items correct: <input type="number" id="items_correct" required><br>
+        Total time (seconds): <input type="number" id="total_time" required><br>
+        Current batch size: <input type="number" id="current_batch_size" required><br>
+        Expected time (seconds): <input type="number" id="expected_time" required><br>
+        <button type="submit">Submit Session</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        let sesssionId = null;
+        document.getElementById("sessionForm").onsubmit = async function (e) {
+            e.preventDefault();
+
+        }
+    </script>
+
+</body>
+
+</html>
