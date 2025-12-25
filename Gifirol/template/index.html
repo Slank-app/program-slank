@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Slank MVP – Korean Lesson 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h2 {
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 10px 16px;
+            margin-top: 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🇰🇷 Learn Korean – Lesson 1</h1>
+
+    <div id="teach" class="card">
+        <h2>Teach</h2>
+        <p><b>나</b> = I</p>
+        <p><b>너</b> = You</p>
+        <p><b>물</b> = Water</p>
+        <p><b>밥</b> = Rice</p>
+        <p><b>먹다</b> = To eat</p>
+        <p><b>가다</b> = To go</p>
+        <button onclick="startTest()">Start Test</button>
+    </div>
+
+    <div id="test" class="card hidden">
+        <h2>Test</h2>
+
+        <p>1. What does <b>물</b> mean?</p>
+        <select id="q1">
+            <option value="">Choose</option>
+            <option value="0">Food</option>
+            <option value="1">Water</option>
+            <option value="0">House</option>
+        </select>
+
+        <p>2. Choose correct past tense of "가다" (to go)</p>
+        <select id="q2">
+            <option value="">Choose</option>
+            <option value="0">가요</option>
+            <option value="1">갔어요</option>
+            <option value="0">가다</option>
+        </select>
+
+        <button onclick="submitTest()">Submit</button>
+    </div>
+
+    <div id="result" class="card hidden">
+        <h2>Diagnosis</h2>
+        <p id="accuracyText"></p>
+        <p id="batchText"></p>
+    </div>
+
+    <script>
+        let currentBatchSize = 7;
+        let expectedTime = 120; // seconds
+
+        function startTest() {
+            document.getElementById("teach").classList.add("hidden");
+            document.getElementById("test").classList.remove("hidden");
+        }
+
+        function submitTest() {
+            let correct = 0;
+            let seen = 2;
+
+            correct += Number(document.getElementById("q1").value);
+            correct += Number(document.getElementById("q2").value);
+
+            let accuracy = correct / seen;
+
+            if (accuracy >= 0.8) currentBatchSize += 2;
+            else if (accuracy < 0.5) currentBatchSize -= 2;
+
+            if (currentBatchSize < 4) currentBatchSize = 4;
+            if (currentBatchSize > 18) currentBatchSize = 18;
+
+            document.getElementById("test").classList.add("hidden");
+            document.getElementById("result").classList.remove("hidden");
+
+            document.getElementById("accuracyText").innerText =
+                "Accuracy: " + Math.round(accuracy * 100) + "%";
+
+            document.getElementById("batchText").innerText =
+                "Next lesson batch size: " + currentBatchSize;
+
+            fetch("http://localhost:5000/session-end", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    items_correct: correct,
+                    items_seen: seen,
+                    total_time: 90,
+                    expected_time: expectedTime,
+                    current_batch_size: currentBatchSize
+                })
+            });
+
+        }
+    </script>
+
+</body>
+
+</html>
